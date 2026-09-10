@@ -57,6 +57,8 @@ def product_detail(request, category_slug, pk):
                 comment.save()
                 messages.success(request, "Thank you for your rating.")
 
+                request.session["rating_submitted"] = True
+
             return redirect("product_detail", category_slug=category_slug, pk=product.pk)
     else:
         if request.session.pop("rating_submitted", False):
