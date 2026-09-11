@@ -29,6 +29,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to="imgs/products/", null=True, blank=True)
     name = models.CharField(max_length=80, blank=False, null=False)
     price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))])
+    tags = models.ManyToManyField("Tag", blank=True, related_name="products")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -48,7 +49,16 @@ class Product(models.Model):
         return self.name
 
 
-# NEW model
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True, null=False, blank=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Comment(models.Model):
     product = models.ForeignKey(Product, related_name="comments", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL)
